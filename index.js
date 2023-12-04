@@ -22,7 +22,26 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        // const productsCollection = 
+        const productsCollection = client.db("techtrovehubDB").collection("products");
+        const categoryCollection = client.db("techtrovehubDB").collection("category");
+
+
+        app.get('/products', async (req, res) => {
+            const result = await productsCollection.find().toArray();
+            if (result) {
+                res.send(result)
+            } else {
+                res.send({ status: "402" });
+            }
+        })
+        app.get('/category', async (req, res) => {
+            const result = await categoryCollection.find().toArray();
+            if (result) {
+                res.send(result)
+            } else {
+                res.send({ status: "402" });
+            }
+        })
 
 
     } finally {
