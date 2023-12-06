@@ -42,6 +42,38 @@ async function run() {
                 res.send({ status: "402" });
             }
         })
+        app.get("/category/:name", async (req, res) => {
+            const categoryName = req.params.name;
+            if (categoryName) {
+                const query = { category: categoryName };
+                const result = await productsCollection.find(query).toArray();
+                return res.send(result)
+            }
+            res.send({ error: "404" })
+        })
+
+        app.get("/offer-products", async (req, res) => {
+            const query = { discount: 25 };
+            const result = await productsCollection.find(query).toArray();
+            if (result) {
+                return res.send(result)
+            }
+            res.send({ error: "404" })
+        })
+        app.get("/offer-category/:name", async (req, res) => {
+            const categoryName = req.params.name;
+            if (categoryName) {
+                const query = {
+                    $and: [
+                        { category: categoryName },
+                        { discount: 25 }
+                    ]
+                };
+                const result = await productsCollection.find(query).toArray();
+                return res.send(result)
+            }
+            res.send({ error: "404" })
+        })
 
 
     } finally {
